@@ -1,7 +1,7 @@
 import React from 'react';
 import "./SideArea.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faSearch, faPlus } from '@fortawesome/free-solid-svg-icons'
 
 class SideArea extends React.Component {
     constructor(props){
@@ -30,6 +30,21 @@ class SideArea extends React.Component {
                         <span className="side-area-section-content-item-text">Miniproject</span>
                         <button className="side-area-section-content-item-button side-area-section-content-item-button-leave">
                             leave
+                        </button>
+                    </div>
+                </div>
+                <div className="side-area-section-header">
+                    <span className="side-area-section-header-text">find group</span>
+                </div>
+                <div className="side-area-section-content" id="findgroup">
+                    <div className="side-area-section-content-item side-area-section-content-item-create">
+                        <FontAwesomeIcon className="create-group-icon" icon={faSearch} />
+                        <input className="create-group-input" type="text" placeholder="enter group name"></input>
+                    </div>
+                    <div className="side-area-section-content-item">
+                        <span className="side-area-section-content-item-text">Group1</span>
+                        <button className="side-area-section-content-item-button side-area-section-content-item-button-join">
+                            join
                         </button>
                     </div>
                 </div>

@@ -1,0 +1,75 @@
+.side-area-container {
+    text-align: left;
+    height: 100%;
+    border-right: 2px solid #8c8c8c;
+}
+
+.side-area-section-header {
+    background-color: #8c8c8c;
+    padding-left: 10px;
+}
+
+.side-area-section-header-text {
+    font-size: 24px;
+    color: white;
+}
+
+#mygroup {
+    min-height: 200px;
+    background-color: bisque;
+}
+
+.side-area-section-content-item {
+    padding-left: 10px;
+    background-color: lightgray;
+    height: 60px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.side-area-section-content-item-create {
+    background-color: white;
+}
+
+.side-area-section-content-item-button {
+    border: none;
+    height: 100%;
+    cursor: pointer;
+    width: 90px;
+    font-size: 1.2rem;
+    color: white;
+    padding: 0px;
+}
+
+.side-area-section-content-item-button-leave {
+    background-color: #D9544F;
+}
+
+.side-area-section-content-item-button-create {
+    background-color: #A1C794;
+}
+
+.side-area-section-content-item-text {
+    font-size: 1.2rem;
+}
+
+.side-area-section-content-item-create-text {
+    color: darkgray;
+}
+
+.create-group-input {
+    border: none;
+    height: 100%;
+    padding: 0px;
+    flex-grow: 1;
+    font-size: 1.2rem;
+}
+
+.create-group-icon {
+    font-size: 1.2rem;
+    color: darkgray;
+    margin-right: 5px;
+}
+

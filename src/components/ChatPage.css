@@ -1,0 +1,47 @@
+.groupchat-name {
+    color: #252525;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.content-container {
+  /* background-color: #61dafb; */
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.side-area-container {
+  height: 100%;
+  flex-grow: 1;
+  /* background-color: red; */
+}
+
+.chat-area {
+  flex-grow: 6;
+  height: 100%;
+  /* background-color: blue; */
+}
+
+.profile {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /* background-color: blueviolet; */
+  padding: 10px;
+}
+
+
+.profile-image {
+  border-radius: 50%;
+  width: 2.5cm;
+  height: 2.5cm;
+  margin-right: 15px;
+}
+
+.profile-name {
+  color: #252525;
+  font-size: 30px;
+  font-weight: bold;
+}

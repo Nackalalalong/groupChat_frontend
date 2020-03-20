@@ -1,7 +1,7 @@
 .groupchat-name {
-    color: #252525;
-    font-size: 25px;
-    font-weight: bold;
+  color: #252525;
+  font-size: 25px;
+  font-weight: bold;
 }
 
 .content-container {
@@ -10,6 +10,7 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  overflow: hidden;
 }
 
 .side-area-container {
@@ -35,8 +36,8 @@
 
 .profile-image {
   border-radius: 50%;
-  width: 2.5cm;
-  height: 2.5cm;
+  width: 60px;
+  height: 60px;
   margin-right: 15px;
 }
 

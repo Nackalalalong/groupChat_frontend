@@ -24,6 +24,26 @@
   }
 }
 
+
+button.submit-button {
+  background-color: #52C4B9;
+  color: white;
+  border: none;
+  outline: none;
+  border-radius: 20px;
+  padding: 10px 50px;
+  font-size: 1.5em;
+  font-family: "supermarket";
+}
+button:hover.submit-button {
+  background-color: #5F9EA0;
+}
+.FormField__Link {
+  color: white;
+  text-decoration: none;
+  display: inline-block;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;

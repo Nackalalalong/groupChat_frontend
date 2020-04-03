@@ -13,7 +13,7 @@ class ChatPage extends React.Component {
             <div className="App">
                 <div className="navbar">
                     <span className="groupchat-name">#ผนงรจตกม</span>
-                    <a href="#">EXIT</a>
+                    <a href="/">EXIT</a>
                 </div>
                 <div className="content-container">
                     <SideArea />

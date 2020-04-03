@@ -16,7 +16,7 @@ import { BrowserRouter as Router, Switch, Route, Link ,NavLink} from 'react-rout
           <Switch>
           
           <Route path="/chatpage" component={ChatPage} />
-          
+           
           <Route exect path='/' component={Homepage} />
           </Switch>
         </Router>

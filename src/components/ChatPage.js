@@ -2,7 +2,7 @@ import React from 'react';
 import './ChatPage.css';
 import SideArea from './SideArea';
 import ChatArea from './ChatArea';
-
+import '../App.css';
 class ChatPage extends React.Component {
     constructor(props){
         super(props);
@@ -10,9 +10,15 @@ class ChatPage extends React.Component {
 
     render(){
         return (
-            <div className="content-container">
-                <SideArea />
-                <ChatArea />
+            <div className="App">
+                <div className="navbar">
+                    <span className="groupchat-name">#ผนงรจตกม</span>
+                    <a href="#">EXIT</a>
+                </div>
+                <div className="content-container">
+                    <SideArea />
+                    <ChatArea />
+                </div>
             </div>
         );
     }

@@ -11,10 +11,6 @@ import ChatPage from './components/ChatPage';
   render() { 
     return (
     <div className="App">
-        <div className="navbar">
-            <span className="groupchat-name">#ผนงรจตกม</span>
-            <a href="#">EXIT</a>
-        </div>
         < ChatPage />
     </div>
   );

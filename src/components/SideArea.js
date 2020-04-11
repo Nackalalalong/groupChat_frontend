@@ -1,11 +1,42 @@
 import React from 'react';
 import "./SideArea.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faSearch, faPlus } from '@fortawesome/free-solid-svg-icons';
+import io from 'socket.io-client';
+import { connect } from 'react-redux';
+
+
+const socket = io("http://localhost:8000");
+
 
 class SideArea extends React.Component {
     constructor(props){
         super(props);
+        this.state = {
+
+        }
+
+        this.socket = io("http://localhost:8000", {
+            query: "token=" + this.props.auth.token
+        });
+    }
+
+    createGroup = () => {
+        if ( this.state.createGroupName === "" ){
+            alert("please insert group name");
+            return ;
+        }
+
+        console.log("emiting createGroup");
+        this.socket.emit("createGroup", this.state.createGroupName);
+        console.log("group created");
+    }
+
+    handleChange = e => {
+        const { name,value } = e.target
+        this.setState({
+            [name] : value
+        });
     }
 
     render(){
@@ -21,8 +52,8 @@ class SideArea extends React.Component {
                 <div className="side-area-section-content" id="mygroup">
                     <div className="side-area-section-content-item side-area-section-content-item-create">
                         <FontAwesomeIcon className="create-group-icon" icon={faPlus} />
-                        <input className="create-group-input" type="text" placeholder="enter group name"></input>
-                        <button className="side-area-section-content-item-button side-area-section-content-item-button-create">
+                        <input onChange={this.handleChange} name="createGroupName" className="create-group-input" type="text" placeholder="enter group name"></input>
+                        <button onClick={this.createGroup} className="side-area-section-content-item-button side-area-section-content-item-button-create">
                             create
                         </button>
                     </div>
@@ -53,4 +84,10 @@ class SideArea extends React.Component {
     }
 }
 
-export default SideArea;
+const mapStateToProps = state => {
+    return {
+        auth: state.auth,
+    };
+  }
+
+export default connect(mapStateToProps,null)(SideArea);

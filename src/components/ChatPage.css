@@ -47,3 +47,15 @@
   font-size: 30px;
   font-weight: bold;
 }
+
+.logout-button {
+  border: none;
+  background-color: transparent;
+  font-weight: bold;
+  color: gray;
+}
+
+.logout-button:hover {
+  cursor: pointer;
+  color: black;
+}

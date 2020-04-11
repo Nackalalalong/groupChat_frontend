@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import ChatPage from './components/ChatPage';
 import Homepage from './components/Homepage';
+import Register from './components/Register';
 import { BrowserRouter as Router, Switch, Route, Link ,NavLink} from 'react-router-dom';
 
  class App extends React.Component {
@@ -16,7 +17,7 @@ import { BrowserRouter as Router, Switch, Route, Link ,NavLink} from 'react-rout
           <Switch>
           
           <Route path="/chatpage" component={ChatPage} />
-           
+          <Route path="/register" component={Register} />
           <Route exect path='/' component={Homepage} />
           </Switch>
         </Router>

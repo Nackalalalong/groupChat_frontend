@@ -39,8 +39,8 @@ class ChatPage extends React.Component {
                     <button className="logout-button" onClick={this.handleLogout}>LOG OUT</button>
                 </div>
                 <div className="content-container">
-                    <SideArea />
-                    <ChatArea />
+                    <SideArea socket={this.socket}/>
+                    <ChatArea socket={this.socket}/>
                 </div>
             </div>
         );

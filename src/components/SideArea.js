@@ -16,9 +16,6 @@ class SideArea extends React.Component {
 
         }
 
-        this.socket = io("http://localhost:8000", {
-            query: "token=" + this.props.auth.token
-        });
     }
 
     createGroup = () => {
@@ -28,7 +25,7 @@ class SideArea extends React.Component {
         }
 
         console.log("emiting createGroup");
-        this.socket.emit("createGroup", this.state.createGroupName);
+        this.props.socket.emit("createGroup", this.state.createGroupName);
         console.log("group created");
     }
 

@@ -3,29 +3,62 @@ import './App.css';
 import ChatPage from './components/ChatPage';
 import Homepage from './components/Homepage';
 import Register from './components/Register';
-import { BrowserRouter as Router, Switch, Route, Link ,NavLink} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link ,NavLink, Redirect} from 'react-router-dom';
+// import 'bootstrap/dist/css/bootstrap.min.css';
+import { connect } from 'react-redux';
+import { auth } from './actions';
+
 
  class App extends React.Component {
 
   constructor(props){
     super(props);
   }
+
+  async componentWillMount(){
+    console.log("loading user");
+    await this.props.loadUser();
+  }
+
+  PrivateRoute = ({component: ChildComponent, ...rest}) => {
+    return <Route {...rest} render={props => {
+      if (!this.props.auth.isAuthenticated) {
+        console.log('app.js not authenticate');
+        return <Redirect to="/login" />;
+      } else {
+        return <ChildComponent {...props} />
+      }
+    }} />
+  }
+
   render() { 
-    return (
-    <div className="App">
-        <Router >
+    let {PrivateRoute} = this;
+      return (
+      <div className="App">
           <Switch>
-          
-          <Route path="/chatpage" component={ChatPage} />
-          <Route path="/register" component={Register} />
-          <Route exect path='/' component={Homepage} />
+            <PrivateRoute path="/chatpage" component={ChatPage} />
+            <Route path="/register" component={Register} />
+            <Route exect path='/' component={Homepage} />
           </Switch>
-        </Router>
-        {/* < ChatPage /> */}
-    </div>
-  );
-}
+          {/* < ChatPage /> */}
+      </div>
+    );
+  }
 
  }
 
-export default App;
+ const mapStateToProps = state => {
+  return {
+    auth: state.auth,
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    loadUser: () => {
+      return dispatch(auth.loadUser());
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

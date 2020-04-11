@@ -13,7 +13,8 @@ class Homepage extends React.Component  {
         formErrors: {
           username: "",
           password: ""
-        }
+        },
+        loading: false
       }
     }
 
@@ -58,12 +59,20 @@ class Homepage extends React.Component  {
       }
 
       try {
+        this.setState({
+          loading: true
+        });
         await this.props.login(this.state.username, this.state.password);
         console.log("login success"); 
       }
       catch(err){
         alert("error");
         console.error(err);
+      }
+      finally {
+        this.setState({
+          loading: false
+        })
       }
     }
 
@@ -85,7 +94,7 @@ class Homepage extends React.Component  {
               <input onChange={this.handleChange} name="password" className="text-input" type="password" placeholder="enter your password" />
               {this.state.formErrors.password !== "" ? <span style={{fontSize: "10px", color: "red"}}>{this.state.formErrors.password}</span> : null}
             </div>
-            <button className="login-button mr-20" onClick={this.handleLogin}>Login</button>
+            <button disabled={this.state.loading} className="login-button mr-20" onClick={this.handleLogin}>Login</button>
             <div style={{textAlign: "right", marginRight: "1rem"}}>
               <p>does not have an account? <a href="/register">register now</a></p>
             </div>

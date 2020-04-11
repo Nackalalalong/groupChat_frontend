@@ -1,5 +1,5 @@
 
-export const loadUser = (username) => {
+export const loadUser = () => {
     return (dispatch, getState) => {
       dispatch({type: "USER_LOADING"});
   
@@ -13,7 +13,7 @@ export const loadUser = (username) => {
       if (token) {
         headers["Authorization"] = `Token ${token}`;
 
-        return fetch("/api/user/"+(username)+"/", {headers, })  
+        return fetch("http://localhost:8000/api/home", {headers, method: "POST"})  
         .then(res => {
           if (res.status < 500) {
             return res.json().then(data => {
@@ -25,6 +25,7 @@ export const loadUser = (username) => {
           }
         })
         .then(res => {
+          console.log(res);
           if (res.status === 200) {
             dispatch({type: 'USER_LOADED', user: res.data });
             return res.data;

@@ -77,10 +77,10 @@ class Homepage extends React.Component  {
           <h1>Login</h1>
             <div className="text-box">
               <h3>Username</h3>
-              <input onChange={this.handleChange} className="text-input" type="text" placeholder="enter your username" />
+              <input onChange={this.handleChange} name="username" className="text-input" type="text" placeholder="enter your username" />
               {this.state.formErrors.username !== "" ? <span style={{fontSize: "10px", color: "red"}}>{this.state.formErrors.username}</span> : null}
               <h3>Password</h3>
-              <input onChange={this.handleChange} className="text-input" type="password" placeholder="enter your password" />
+              <input onChange={this.handleChange} name="password" className="text-input" type="password" placeholder="enter your password" />
               {this.state.formErrors.password !== "" ? <span style={{fontSize: "10px", color: "red"}}>{this.state.formErrors.password}</span> : null}
             </div>
             <button className="login-button mr-20" onClick={() => this.handleLogin}>Login</button>
@@ -102,7 +102,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
       login: (username, password) => {
-        return dispatch(auth.lofin(username, password));
+        return dispatch(auth.login(username, password));
       },
     };
 }

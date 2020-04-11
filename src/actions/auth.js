@@ -71,16 +71,15 @@ export const loadUser = (username) => {
     }
   }
 
-  export const register = (first_name, last_name, username, password, email, phone_number) => {
+  export const register = (name, username, password,) => {
     return (dispatch, getState) => {
       let headers = {
           "Content-Type": "application/json",
-        //   "Authorization": "Token ead12abc8e793aa3447e2464c79abfccc5225d1c"
          };
-      let body = JSON.stringify({first_name, last_name, username, password, email, phone_number});
+      let body = JSON.stringify({name, username, password});
       console.log(body);
   
-      return fetch("/api/user/", {headers, body, method: "POST"})
+      return fetch("/api/register", {headers, body, method: "POST"})
         .then(res => {
           if (res.status < 500) {
             return res.json().then(data => {

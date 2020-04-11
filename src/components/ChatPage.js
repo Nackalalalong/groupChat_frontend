@@ -10,7 +10,7 @@ class ChatPage extends React.Component {
 
     render(){
         return (
-            <div className="App">
+            <div className="Apps">
                 <div className="navbar">
                     <span className="groupchat-name">#ผนงรจตกม</span>
                     <a href="/">EXIT</a>

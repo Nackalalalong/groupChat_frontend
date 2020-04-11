@@ -12,6 +12,7 @@ const Homepage = () => {
               <input className="text-input" type="text" placeholder="enter your password" />
             </div>
             <button className="login-button mr-20"><a href='#' className="FormField__Link center">Login</a></button>
+            <button className="login-button mr-20"><a href='/register' className="FormField__Link center">Register</a></button>
           </div>
           <button className="submit-button mr-20"><a href='/chatpage' className="FormField__Link">Go to ChatPage</a></button>
         </div>

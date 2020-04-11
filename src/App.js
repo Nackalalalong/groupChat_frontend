@@ -13,7 +13,7 @@ import { BrowserRouter as Router, Switch, Route, Link ,NavLink} from 'react-rout
   render() { 
     return (
     <div className="App">
-        <Router>
+        <Router >
           <Switch>
           
           <Route path="/chatpage" component={ChatPage} />

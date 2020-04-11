@@ -1,7 +1,8 @@
 import React from 'react';
 import '../App.css';
 import  { connect} from 'react-redux';
-
+import { auth } from '../actions';
+import { withRouter } from 'react-router';
 
 class Register extends React.Component  {
 
@@ -75,17 +76,22 @@ class Register extends React.Component  {
     }
   
       handleRegister = async () => {
+          this.validateForm();
         if ( !this.isFormValid() ){
           return ;
         }
   
         try {
-          await this.props.register(this.state.username, this.state.password);
+          await this.props.register(this.state.name, this.state.username, this.state.password);
+          console.log("login successful");
         }
         catch(err){
-          alert("error");
           console.error(err);
         }
+      }
+
+      goBack = () => {
+        this.props.history.goBack();
       }
 
     render(){
@@ -94,21 +100,19 @@ class Register extends React.Component  {
                 <div className="reg-box">
                     <h1>Register</h1>
                     <div className="text-box">
-                        <h3>Name</h3>
+                        <h3>Name{this.state.formErrors.name !== "" ? <span style={{fontSize: "10px", color: "red", marginLeft: "1rem"}}>{this.state.formErrors.name}</span> : null}</h3>
                         <input onChange={this.handleChange} name="name" className="text-input" type="text" placeholder="enter your name" />
-                        {this.state.formErrors.name !== "" ? <span style={{fontSize: "10px", color: "red"}}>{this.state.formErrors.name}</span> : null}
-                        <h3>Username</h3>
+                        <h3>Username{this.state.formErrors.username !== "" ? <span style={{fontSize: "10px", color: "red", marginLeft: "1rem"}}>{this.state.formErrors.username}</span> : null}</h3>
                         <input onChange={this.handleChange} name="username" className="text-input" type="text" placeholder="enter your username" />
-                        {this.state.formErrors.username !== "" ? <span style={{fontSize: "10px", color: "red"}}>{this.state.formErrors.username}</span> : null}
-                        <h3>Password</h3>
+                        <h3>Password{this.state.formErrors.password !== "" ? <span style={{fontSize: "10px", color: "red", marginLeft: "1rem"}}>{this.state.formErrors.password}</span> : null}</h3>
                         <input onChange={this.handleChange} name="password" className="text-input" type="password" placeholder="enter your password" />
-                        {this.state.formErrors.password !== "" ? <span style={{fontSize: "10px", color: "red"}}>{this.state.formErrors.password}</span> : null}
-                        <h3>Confirm Password</h3>
+                        <h3>Confirm Password{this.state.formErrors.confirmPassword !== "" ? <span style={{fontSize: "10px", color: "red", marginLeft: "1rem"}}>{this.state.formErrors.confirmPassword}</span> : null}</h3>
                         <input onChange={this.handleChange} name="confirmPassword" className="text-input" type="password" placeholder="enter your password" />
-                        {this.state.formErrors.confirmPassword !== "" ? <span style={{fontSize: "10px", color: "red"}}>{this.state.formErrors.confirmPassword}</span> : null}
                     </div>
-                    <button className="login-button mr-20"><a href='/' className="FormField__Link center">Back</a></button>
-                    <button className="login-button mr-20"><a href='#' className="FormField__Link center">Submit</a></button>
+                </div>
+                <div>
+                    <button className="login-button mr-20" onClick={this.goBack}>Back</button>
+                    <button className="login-button mr-20" onClick={this.handleRegister}>Submit</button>
                 </div>
             </div>
         );
@@ -117,11 +121,11 @@ class Register extends React.Component  {
   
   const mapDispatchToProps = dispatch => {
     return {
-        register: (username, password) => {
-          return dispatch(auth.register(username, password));
+        register: (name, username, password) => {
+          return dispatch(auth.register(name, username, password));
         },
       };
   }
   
 
-export default connect(null,mapDispatchToProps)(Register);
+export default connect(null,mapDispatchToProps)(withRouter(Register));

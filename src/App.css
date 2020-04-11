@@ -24,7 +24,7 @@
 }
 
 .login-box {
-  height: 50%;
+  /* height: 50%; */
   width: 30%;
   background-color: white;
   border-radius: 20px;
@@ -90,6 +90,7 @@ button.login-button {
   margin-top: 5%;
   margin-left: auto;
   margin-right: 2%;
+  cursor: pointer;
 }
 button:hover.login-button {
   background-color: #5F9EA0;
@@ -148,11 +149,12 @@ input {
   font-family: "supermarket";
 }
 .reg-box {
-  height: 65%;
+  /* height: 65%; */
   width: 30%;
   background-color: white;
   border-radius: 20px;
   margin-top: 7%;
   margin-left: auto;
   margin-right: auto;
+  padding-bottom: 1rem;
 }

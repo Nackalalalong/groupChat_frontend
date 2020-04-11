@@ -21,19 +21,19 @@ const initialState = {
         case 'LOGIN_SUCCESSFUL':
             localStorage.setItem('username', action.username);
             localStorage.setItem("token", action.data.token);
-            console.log(localStorage.getItem('username'));
+            // console.log(localStorage.getItem('username'));
             return {...state, ...action.data, isAuthenticated: true, isLoading: false, errors: null};
         case 'REGISTRATION_SUCCESSFUL':
                 console.log(action);
                 localStorage.setItem("token", action.data.token);
-                localStorage.setItem('username', action.data.result.username);
+                // localStorage.setItem('username', action.data.result.username);
                 return {...state, ...action.data, isAuthenticated: false, isLoading: false, errors: null};
   
         case 'AUTHENTICATION_ERROR':
         case 'LOGIN_FAILED':
         case 'LOGOUT_SUCCESSFUL':
             localStorage.removeItem("token");
-            localStorage.removeItem("username");
+            // localStorage.removeItem("username");
             return {...state, errors: action.data, token: null, user: null,
             isAuthenticated: false, isLoading: false};
   

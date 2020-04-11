@@ -43,7 +43,7 @@ export const loadUser = (username) => {
       let headers = {"Content-Type": "application/json"};
       let body = JSON.stringify({username, password});
   
-      return fetch("/auth/", {headers, body, method: "POST"})
+      return fetch("http://localhost:8000/api/login", {headers, body, method: "POST"})
         .then(res => {
           if (res.status < 500) {
             return res.json().then(data => {
@@ -79,7 +79,7 @@ export const loadUser = (username) => {
       let body = JSON.stringify({name, username, password});
       console.log(body);
   
-      return fetch("/api/register", {headers, body, method: "POST"})
+      return fetch("http://localhost:8000/api/register", {headers, body, method: "POST"})
         .then(res => {
           if (res.status < 500) {
             return res.json().then(data => {

@@ -52,12 +52,14 @@ class Homepage extends React.Component  {
   }
 
     handleLogin = async () => {
+      this.validateForm();
       if ( !this.isFormValid() ){
         return ;
       }
 
       try {
         await this.props.login(this.state.username, this.state.password);
+        console.log("login success"); 
       }
       catch(err){
         alert("error");
@@ -83,7 +85,10 @@ class Homepage extends React.Component  {
               <input onChange={this.handleChange} name="password" className="text-input" type="password" placeholder="enter your password" />
               {this.state.formErrors.password !== "" ? <span style={{fontSize: "10px", color: "red"}}>{this.state.formErrors.password}</span> : null}
             </div>
-            <button className="login-button mr-20" onClick={() => this.handleLogin}>Login</button>
+            <button className="login-button mr-20" onClick={this.handleLogin}>Login</button>
+            <div style={{textAlign: "right", marginRight: "1rem"}}>
+              <p>does not have an account? <a href="/register">register now</a></p>
+            </div>
           </div>
           <button className="submit-button mr-20"><a href='/chatpage' className="FormField__Link">Go to ChatPage</a></button>
         </div>

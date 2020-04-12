@@ -170,7 +170,7 @@ class ChatArea extends React.Component {
                   <Modal.Header closeButton>
                     <Modal.Title>Do you want to delete this group?</Modal.Title>
                   </Modal.Header>
-                  <Modal.Body>evething related to this group will be disappeared!</Modal.Body>
+                  <Modal.Body>Evething related to this group will be disappeared!</Modal.Body>
                   <Modal.Footer>
                     <Button variant="secondary" onClick={this.handleClose}>
                         no

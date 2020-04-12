@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faPlus } from '@fortawesome/free-solid-svg-icons';
 import io from 'socket.io-client';
 import { connect } from 'react-redux';
-import { Tab, Tabs } from 'react-bootstrap';
+import { Tab, Tabs, Button, Modal } from 'react-bootstrap';
 import ReactTooltip from 'react-tooltip'
 
 const socket = io("http://localhost:8000");
@@ -14,10 +14,69 @@ class SideArea extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            showFindGroup: false,
+            showFindGroup: true,
             findGroupID: "",
             joinGroupID: "",
-            createGroupName: ""
+            createGroupName: "",
+            showModal: false,
+            shouldReload: false,
+            modalTitle: "",
+            modalDesc: "",
+            requesting: false
+        }
+
+        this.props.socket.on("joinGroupResult", this.joinGroupResult);
+        this.props.socket.on("createGroupResult", this.createGroupResult);
+    }
+
+    createGroupResult = (status) => {
+        if ( status === "success" ){
+            this.setState({
+                showModal: true,
+                shouldReload: true,
+                modalTitle: "Create Group Success!",
+                modalDesc: "You can now chat in the group. Send group ID to your friends to join your group."
+            });
+        }
+        else {
+            this.setState({
+                showModal: true,
+                shouldReload: false,
+                modalTitle: "Create Group fail!",
+                modalDesc: "Something went wrong, please try again later.",
+                requesting: false
+            })
+        }
+    }
+
+    joinGroupResult = (status) => {
+        if ( status === "success" ){
+            this.setState({
+                showModal: true,
+                shouldReload: true,
+                modalTitle: "Join Group Success!",
+                modalDesc: "You can now chat in the group."
+            });
+        }
+        else {
+            this.setState({
+                showModal: true,
+                shouldReload: false,
+                modalTitle: "Join Group fail!",
+                modalDesc: "Something went wrong, please try again later.",
+                requesting: false
+            })
+        }
+    }
+
+    handleClose = () => {
+        if ( this.state.shouldReload ){
+            window.location.reload();
+        }
+        else {
+            this.setState({
+                showModal: false
+            });
         }
     }
 
@@ -26,7 +85,9 @@ class SideArea extends React.Component {
             alert("please insert group name");
             return ;
         }
-
+        this.setState({
+            requesting: true
+        })
         console.log("emiting createGroup");
         this.props.socket.emit("createGroup", this.state.createGroupName);
         console.log("group created");
@@ -60,15 +121,15 @@ class SideArea extends React.Component {
             return ;
         }
 
+        this.setState({
+            requesting: true
+        });
         console.log("emitting joinGroup");
         this.props.socket.emit("joinGroup", {
             gid: joinGroupID,
             username: this.props.user.username,
             sid: this.props.user._id
         });
-        this.setState({
-            joinGroupID: ""
-        })
         console.log("done emitting joinGroup");
     }
 
@@ -102,15 +163,15 @@ class SideArea extends React.Component {
                 <div className={"side-area-section-content"} >
                     <div className={"side-area-section-content-item side-area-section-content-item-create" + (!this.state.showFindGroup ? " item-collapse" : "")}>
                         <FontAwesomeIcon className="create-group-icon" icon={faPlus} style={{display: this.state.showFindGroup? "block":"none"}}/>
-                        <input onChange={this.handleChange} name="createGroupName" className="create-group-input" type="text" placeholder="enter group name"></input>
-                        <button onClick={this.createGroup} className="side-area-section-content-item-button side-area-section-content-item-button-create">
+                        <input value={this.state.createGroupName} onChange={this.handleChange} name="createGroupName" className="create-group-input" type="text" placeholder="enter group name"></input>
+                        <button disabled={this.state.requesting}  onClick={this.createGroup} className="side-area-section-content-item-button side-area-section-content-item-button-create">
                             create
                         </button>
                     </div>
                     <div className={"side-area-section-content-item side-area-section-content-item-create"+ (!this.state.showFindGroup ? " item-collapse" : "")}>
                         <FontAwesomeIcon className="create-group-icon" icon={faSearch} style={{display: this.state.showFindGroup? "block":"none"}}/>
-                        <input onChange={this.handleChange} name="joinGroupID" className="create-group-input" type="text" placeholder="enter group ID"></input>
-                        <button onClick={this.handleJoinGroup} className="side-area-section-content-item-button side-area-section-content-item-button-join">
+                        <input value={this.state.joinGroupID} onChange={this.handleChange} name="joinGroupID" className="create-group-input" type="text" placeholder="enter group ID"></input>
+                        <button disabled={this.state.requesting} onClick={this.handleJoinGroup} className="side-area-section-content-item-button side-area-section-content-item-button-join">
                             join
                         </button>
                     </div>
@@ -152,7 +213,17 @@ class SideArea extends React.Component {
                         {groupTab}
                     </Tab>
                 </Tabs>
-                
+                <Modal show={this.state.showModal} onHide={this.handleClose}>
+                  <Modal.Header closeButton>
+                    <Modal.Title>{this.state.modalTitle}</Modal.Title>
+                  </Modal.Header>
+                <Modal.Body>{this.state.modalDesc}</Modal.Body>
+                  <Modal.Footer>
+                    <Button variant="primary" onClick={this.handleClose}>
+                      OK
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
             </div>
         );
     }

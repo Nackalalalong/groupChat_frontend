@@ -150,13 +150,17 @@ class ChatArea extends React.Component {
             }
         }
 
+        let deleteGroupButton = this.state.owner === this.props.user.username ? 
+            <button onClick={this.showDeleteGroupConfirmation} className="btn btn-secondary delete-group-button">delete</button>
+            : null;
+
         return (
             <div className="chat-area">
                 <div className="top-bar">
                     <span className="top-bar-header-text">{this.state.chatName}</span><br />
                     <span className="top-bar-sub-text">{"number of members: " + this.state.members.length 
                         + " group ID: " + this.state._id}</span>
-                    <button onClick={this.showDeleteGroupConfirmation} className="btn btn-secondary delete-group-button">delete</button>
+                    {deleteGroupButton}
                 </div>
                 <div className="middle-screen">
                     {chatComponents}
@@ -168,9 +172,9 @@ class ChatArea extends React.Component {
                 </div>
                 <Modal show={this.state.showModal} onHide={this.handleClose}>
                   <Modal.Header closeButton>
-                    <Modal.Title>Do you want to delete this group?</Modal.Title>
+                    <Modal.Title>Do you want to <span className="text-danger">delete</span> this group?</Modal.Title>
                   </Modal.Header>
-                  <Modal.Body>Evething related to this group will be disappeared!</Modal.Body>
+                  <Modal.Body><span className="text-danger">Evething</span> related to this group will be disappeared!</Modal.Body>
                   <Modal.Footer>
                     <Button variant="secondary" onClick={this.handleClose}>
                         no

@@ -145,6 +145,7 @@ class SideArea extends React.Component {
 
         let chatRoomComponents = [];
         let chatRooms = this.props.user.chatRooms;
+        let groupComponents = [];
         if ( chatRooms != null ){
             for( const room of chatRooms){
                 chatRoomComponents.push(
@@ -152,6 +153,14 @@ class SideArea extends React.Component {
                         <span className="side-area-section-content-item-text">{room.chatName}</span>
                     </div>
                 );
+
+                if ( room.owner === this.props.user.username ){
+                    groupComponents.push(
+                        <div onClick={() => this.handleChangeChatRoom(room.cid)} key={"room-chat-"+room.cid} className="side-area-section-content-item hover-pointer" data-tip={"room CID: "+room.cid}>
+                        <span className="side-area-section-content-item-text">{room.chatName}</span>
+                    </div>
+                    )
+                }
             }
         }
         
@@ -192,6 +201,7 @@ class SideArea extends React.Component {
                             leave
                         </button>
                     </div> */}
+                    {groupComponents}
                 </div>
             </Fragment>
         );
@@ -201,7 +211,7 @@ class SideArea extends React.Component {
                 <ReactTooltip delayShow={1000}/>
                 <div className="profile">
                     <img className="profile-image" src={require("../images/dog1.png")} />
-                    <span className="profile-name">{this.props.user.username}</span>
+                    <span className="profile-name">{this.props.user.name}</span>
                 </div>
                 <Tabs defaultActiveKey="chat">
                     <Tab eventKey="chat" title="chat">

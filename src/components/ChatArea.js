@@ -72,13 +72,17 @@ class ChatArea extends React.Component {
         });
     }
 
+    padTwo = (number) => {
+        return Array(Math.max(2 - String(number).length + 1, 0)).join(0) + number;
+    }
+
     getTime = (timestamp) => {
         let date = new Date(timestamp);
         // console.log(date);
         const thaiDays = ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส", ]
         const thaiMonths = ['ม.ค.', "ก.พ.", "มี.ค.", "เม.ษ.", "พ.ค", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
         return thaiDays[date.getDay()] + " " + date.getDate() + " " + thaiMonths[date.getMonth()] + " " +
-            date.getHours() + ":" + date.getMinutes() + " น.";
+            this.padTwo(date.getHours()) + ":" + this.padTwo(date.getMinutes()) + " น.";
     }
 
     render(){

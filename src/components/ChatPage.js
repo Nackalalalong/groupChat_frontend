@@ -34,7 +34,7 @@ class ChatPage extends React.Component {
         this.setState({
             currentRoomCID: roomCID
         });
-        this.chatAreaRef.current.updateRoom(roomCID);
+        this.chatAreaRef.current.updateRoomInfo(roomCID);
     }
 
     render(){

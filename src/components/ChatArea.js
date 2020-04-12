@@ -8,24 +8,32 @@ class ChatArea extends React.Component {
         super(props);
 
         this.state = {
-            roomCID: this.props.roomCID,
-            room: null
+            roomCID: null,
+            room: null,
+            message: ""
         }
 
         this.props.socket.on("thisRoom", room => {
             console.log(room);
             this.setState({
-                room: room
+               ...room
             });
         });
 
-        if ( this.state.roomCID != null ){
-            console.log("first load chat data");
-            this.loadChatData(this.state.roomCID);
-        }
+        this.props.socket.on("updateRoom", this.updateRoom);
     }
 
-    updateRoom = (roomCID) => {
+    updateRoom = (chat) => {
+        console.log("update room");
+        console.log(chat);
+        let messages = this.state.messages;
+        messages.push(chat);
+        this.setState({
+            messages
+        })
+    }
+
+    updateRoomInfo = (roomCID) => {
         if ( roomCID !== this.state.roomCID ){
             this.setState({
                 roomCID
@@ -39,21 +47,90 @@ class ChatArea extends React.Component {
         this.props.socket.emit("room", roomCID);
     }
 
+    handleSendMessage = () => {
+        console.log("handle send message");
+        let message = this.state.message;
+        if ( message == null || message === "" ){
+            return ;
+        }
+
+        console.log("sending message: " + message)
+        this.props.socket.emit("chat", {
+            msg: message,
+            username: this.props.user.username,
+            cid: this.state._id
+        });
+        this.setState({
+            message: ""
+        });
+    }
+
+    handleChange = e => {
+        const { name,value } = e.target
+        this.setState({
+            [name] : value
+        });
+    }
+
+    getTime = (timestamp) => {
+        let date = new Date(timestamp);
+        return date.getHours() + ":" + date.getMinutes() + " น.";
+    }
+
     render(){
+
+        if ( this.state._id == null ){
+            return (
+                <div className="chat-area">
+                    <h1>pls select chat</h1>
+                </div>
+            );
+        }
+
+        let chatComponents = [];
+        for( let i=this.state.messages.length-1; i>=0; i--){
+            const chatMessage = this.state.messages[i];
+            if ( chatMessage.username === this.props.user.username ){
+                chatComponents.push(
+                    <div key={"chat" + chatMessage.timestamp} className="chat-item-me">
+                        <div className="chat-item-message">{chatMessage.msg}</div>
+                        <div className="chat-timestamp-holder">
+                            <div className="chat-timestamp">{this.getTime(chatMessage.timestamp)}</div>
+                        </div>
+                    </div>
+                );
+            }
+            else {
+                chatComponents.push(
+                    <div key={"chat" + chatMessage.timestamp} className="chat-item">
+                        <img className="profile-image chat-item-profile-image" src={require("../images/dog2.png")} />
+                        <div className="chat-item-message">{chatMessage.msg}</div>
+                    </div>
+                );
+            }
+        }
+
         return (
             <div className="chat-area">
                 <div className="top-bar">
-                    <span className="top-bar-header-text">Miniproject</span><br />
-                    <span className="top-bar-sub-text">number of members: 5</span>
+                    <span className="top-bar-header-text">{this.state.chatName}</span><br />
+                    <span className="top-bar-sub-text">number of members: {this.state.members.length}</span>
                 </div>
                 <div className="middle-screen">
-                     <div className="chat-item">
+                    {chatComponents}
+                     {/* <div className="chat-item">
                          <img className="profile-image chat-item-profile-image" src={require("../images/dog2.png")} />
                          <div className="chat-item-message">สวัสดี สิริ!</div>
+                         <div className="chat-timestamp-holder">
+                            <div className="chat-timestamp">{"asdasdasdasdasd"}</div>
+                        </div>
                      </div>
                      <div className="chat-item">
                          <img className="profile-image chat-item-profile-image" src={require("../images/dog3.png")} />
-                         <div className="chat-item-message">สวัสดี มีไรให้ช่วยหรอมานุดดด!</div>
+                         <div className="chat-item-message">สวัสดี มีไรให้ช่asdasd asads asd asd asd asd asasd ads asdas ads ads asdas dads วยหรอมานุดsas das dasd asd sadas dasd asd asd asd asd asd asd asd ads ดด!</div>
+                         <div className="chat-timestamp-holder">
+                            <div className="chat-timestamp">{"asdasdasdasdasd"}</div>
+                        </div>
                      </div>
                      <div className="chat-item">
                          <img className="profile-image chat-item-profile-image" src={require("../images/dog2.png")} />
@@ -70,11 +147,35 @@ class ChatArea extends React.Component {
                          <img className="profile-image chat-item-profile-image" src={require("../images/dog4.png")} />
                          <div className="chat-item-message">พวกนายนินทาอาจารย์อยู่ใช่มั๊ยยยยยย</div>
                      </div>
+                     <div className="chat-item">
+                         <img className="profile-image chat-item-profile-image" src={require("../images/dog4.png")} />
+                         <div className="chat-item-message">พวกนายนินทาอาจารย์อยู่ใช่มั๊ยยยยยย</div>
+                     </div>
+                     <div className="chat-item">
+                         <img className="profile-image chat-item-profile-image" src={require("../images/dog4.png")} />
+                         <div className="chat-item-message">พวกนายนินทาอาจารย์อยู่ใช่มั๊ยยยยยย</div>
+                     </div>
+                     <div className="chat-item">
+                         <img className="profile-image chat-item-profile-image" src={require("../images/dog4.png")} />
+                         <div className="chat-item-message">พวกนายนินทาอาจารย์อยู่ใช่มั๊ยยยยยย</div>
+                     </div>
+                     <div className="chat-item">
+                         <img className="profile-image chat-item-profile-image" src={require("../images/dog4.png")} />
+                         <div className="chat-item-message">พวกนายนินทาอาจารย์อยู่ใช่มั๊ยยยยยย</div>
+                     </div>
+                     <div className="chat-item">
+                         <img className="profile-image chat-item-profile-image" src={require("../images/dog4.png")} />
+                         <div className="chat-item-message">พวกนายนินทาอาจารย์อยู่ใช่มั๊ยยยยยย</div>
+                     </div>
+                     <div className="chat-item">
+                         <img className="profile-image chat-item-profile-image" src={require("../images/dog4.png")} />
+                         <div className="chat-item-message">พวกนายนินทาอาจารย์อยู่ใช่มั๊ยยยยยย</div>
+                     </div> */}
                 </div>
                 <div className="bottom-input">
                      <img className="profile-image" src={require("../images/dog1.png")} />
-                     <input className="chat-input" type="text" placeholder="enter your message..." />
-                     <button className="send-button"><FontAwesomeIcon icon={faPaperPlane} style={{marginRight: "5px"}} />Send</button>
+                     <input name="message" onChange={this.handleChange}  className="chat-input" type="text" placeholder="enter your message..." />
+                     <button onClick={this.handleSendMessage} className="send-button"><FontAwesomeIcon icon={faPaperPlane} style={{marginRight: "5px"}} />Send</button>
                 </div>
             </div>
         );

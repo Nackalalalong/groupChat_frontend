@@ -90,7 +90,7 @@ class ChatArea extends React.Component {
         console.log("emitting delete group id: " + this.state._id);
         this.props.socket.emit("deleteGroup", this.state._id);
         console.log("done emitting deleteGroup");
-        window.location.reload();
+        //window.location.reload();
     }
 
     showDeleteGroupConfirmation = () => {

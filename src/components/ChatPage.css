@@ -17,13 +17,14 @@
 .side-area-container {
   height: 100%;
   flex-grow: 1;
+  min-width: 350px;
   /* background-color: red; */
 }
 
 .chat-area {
-  flex-grow: 6;
+  flex-grow: 5;
   height: 100%;
-  width: 40%;
+  /* width: 40%; */
   /* background-color: blue; */
 }
 

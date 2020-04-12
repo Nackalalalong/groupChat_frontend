@@ -170,7 +170,7 @@ class SideArea extends React.Component {
                 <ReactTooltip delayShow={1000}/>
                 <div className="profile">
                     <img className="profile-image" src={require("../images/dog1.png")} />
-                    <span className="profile-name">ประยุทธ์ จันทร์โอมายก๊อด</span>
+                    <span className="profile-name">{this.props.user.username}</span>
                 </div>
                 <Tabs defaultActiveKey="chat">
                     <Tab eventKey="chat" title="chat">

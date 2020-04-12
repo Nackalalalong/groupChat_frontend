@@ -86,7 +86,7 @@ class ChatArea extends React.Component {
         if ( this.state._id == null ){
             return (
                 <div className="chat-area">
-                    <h1>pls select chat</h1>
+                    <h1 style={{color: "gray"}}>pls select chat</h1>
                 </div>
             );
         }
@@ -118,7 +118,8 @@ class ChatArea extends React.Component {
             <div className="chat-area">
                 <div className="top-bar">
                     <span className="top-bar-header-text">{this.state.chatName}</span><br />
-                    <span className="top-bar-sub-text">number of members: {this.state.members.length}</span>
+                    <span className="top-bar-sub-text">{"number of members: " + this.state.members.length 
+                        + " group ID: " + this.state._id}</span>
                 </div>
                 <div className="middle-screen">
                     {chatComponents}

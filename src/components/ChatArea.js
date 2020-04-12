@@ -22,6 +22,9 @@ class ChatArea extends React.Component {
         });
 
         this.props.socket.on("updateRoom", this.updateRoom);
+        this.props.socket.on("deleteGroupSuccess", (some) => {
+            window.location.reload();
+        });
     }
 
     updateRoom = (chat) => {
@@ -79,9 +82,13 @@ class ChatArea extends React.Component {
 
     getTime = (timestamp) => {
         let date = new Date(timestamp);
+        let now = new Date();
         // console.log(date);
         const thaiDays = ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส", ]
         const thaiMonths = ['ม.ค.', "ก.พ.", "มี.ค.", "เม.ษ.", "พ.ค", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
+        if ( now.getDate() === date.getDate() && now.getMonth() === date.getMonth() && now.getFullYear() === date.getFullYear() ){
+            return this.padTwo(date.getHours()) + ":" + this.padTwo(date.getMinutes()) + " น.";
+        }
         return thaiDays[date.getDay()] + " " + date.getDate() + " " + thaiMonths[date.getMonth()] + " " +
             this.padTwo(date.getHours()) + ":" + this.padTwo(date.getMinutes()) + " น.";
     }
@@ -90,7 +97,7 @@ class ChatArea extends React.Component {
         console.log("emitting delete group id: " + this.state._id);
         this.props.socket.emit("deleteGroup", this.state._id);
         console.log("done emitting deleteGroup");
-        window.location.reload();
+        // window.location.reload();
     }
 
     showDeleteGroupConfirmation = () => {

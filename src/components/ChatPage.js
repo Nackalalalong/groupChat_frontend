@@ -22,6 +22,7 @@ class ChatPage extends React.Component {
         });
         this.socket.on("chatRooms", data => {
             console.log("getting chatRooms");
+            console.log(data);
             me.setState({ chatRooms: data })
         });
         this.socket.on("friendList", data => me.setState({ friendList: data }));

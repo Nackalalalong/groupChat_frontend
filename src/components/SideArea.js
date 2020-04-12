@@ -16,11 +16,13 @@ class SideArea extends React.Component {
         this.state = {
             showFindGroup: false,
             findGroupID: "",
+            joinGroupID: "",
+            createGroupName: ""
         }
     }
 
     createGroup = () => {
-        if ( this.state.createGroupName === "" ){
+        if ( this.state.createGroupName === "" || this.state.createGroupName == null){
             alert("please insert group name");
             return ;
         }
@@ -51,7 +53,23 @@ class SideArea extends React.Component {
     }
 
     handleJoinGroup = () => {
+        console.log("handle joinGroup");
+        let joinGroupID = this.state.joinGroupID;
+        if ( joinGroupID == null || joinGroupID === "" ) {
+            alert("please enter group ID to join");
+            return ;
+        }
 
+        console.log("emitting joinGroup");
+        this.props.socket.emit("joinGroup", {
+            gid: joinGroupID,
+            username: this.props.user.username,
+            sid: this.props.user._id
+        });
+        this.setState({
+            joinGroupID: ""
+        })
+        console.log("done emitting joinGroup");
     }
 
     handleLeaveGroup = () => {
@@ -91,7 +109,7 @@ class SideArea extends React.Component {
                     </div>
                     <div className={"side-area-section-content-item side-area-section-content-item-create"+ (!this.state.showFindGroup ? " item-collapse" : "")}>
                         <FontAwesomeIcon className="create-group-icon" icon={faSearch} style={{display: this.state.showFindGroup? "block":"none"}}/>
-                        <input className="create-group-input" type="text" placeholder="enter group ID"></input>
+                        <input onChange={this.handleChange} name="joinGroupID" className="create-group-input" type="text" placeholder="enter group ID"></input>
                         <button onClick={this.handleJoinGroup} className="side-area-section-content-item-button side-area-section-content-item-button-join">
                             join
                         </button>
@@ -107,60 +125,12 @@ class SideArea extends React.Component {
                     <span className="side-area-section-header-text">my groups</span>
                 </div>
                 <div className="side-area-section-content" id="mygroup">
-                    <div className="side-area-section-content-item">
+                    {/* <div className="side-area-section-content-item">
                         <span className="side-area-section-content-item-text">Miniproject</span>
                         <button className="side-area-section-content-item-button side-area-section-content-item-button-leave">
                             leave
                         </button>
-                    </div>
-                    <div className="side-area-section-content-item">
-                        <span className="side-area-section-content-item-text">Miniproject</span>
-                        <button className="side-area-section-content-item-button side-area-section-content-item-button-leave">
-                            leave
-                        </button>
-                    </div>
-                    <div className="side-area-section-content-item">
-                        <span className="side-area-section-content-item-text">Miniproject</span>
-                        <button className="side-area-section-content-item-button side-area-section-content-item-button-leave">
-                            leave
-                        </button>
-                    </div>
-                    <div className="side-area-section-content-item">
-                        <span className="side-area-section-content-item-text">Miniproject</span>
-                        <button className="side-area-section-content-item-button side-area-section-content-item-button-leave">
-                            leave
-                        </button>
-                    </div>
-                    <div className="side-area-section-content-item">
-                        <span className="side-area-section-content-item-text">Miniproject</span>
-                        <button className="side-area-section-content-item-button side-area-section-content-item-button-leave">
-                            leave
-                        </button>
-                    </div>
-                    <div className="side-area-section-content-item">
-                        <span className="side-area-section-content-item-text">Miniproject</span>
-                        <button className="side-area-section-content-item-button side-area-section-content-item-button-leave">
-                            leave
-                        </button>
-                    </div>
-                    <div className="side-area-section-content-item">
-                        <span className="side-area-section-content-item-text">Miniproject</span>
-                        <button className="side-area-section-content-item-button side-area-section-content-item-button-leave">
-                            leave
-                        </button>
-                    </div>
-                    <div className="side-area-section-content-item">
-                        <span className="side-area-section-content-item-text">Miniproject</span>
-                        <button className="side-area-section-content-item-button side-area-section-content-item-button-leave">
-                            leave
-                        </button>
-                    </div>
-                    <div className="side-area-section-content-item">
-                        <span className="side-area-section-content-item-text">Miniproject</span>
-                        <button className="side-area-section-content-item-button side-area-section-content-item-button-leave">
-                            leave
-                        </button>
-                    </div>
+                    </div> */}
                 </div>
             </Fragment>
         );

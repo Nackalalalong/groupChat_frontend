@@ -92,7 +92,7 @@
 
 .chat-timestamp-holder {
     height: 100%;
-    margin: 0 3px 0 3px;
+    margin: 0 3px 0px 3px;
     display: flex;
     flex-direction: column-reverse;
 }
@@ -100,4 +100,5 @@
 .chat-timestamp {
     font-size: 0.75rem;
     color: #8c8c8c;
+    margin-bottom: 3px;
 }

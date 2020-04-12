@@ -74,7 +74,7 @@ class ChatArea extends React.Component {
 
     getTime = (timestamp) => {
         let date = new Date(timestamp);
-        console.log(date);
+        // console.log(date);
         const thaiDays = ["อา", "จ", "อ", "พ", "พฤ", "ศ", "ส", ]
         const thaiMonths = ['ม.ค.', "ก.พ.", "มี.ค.", "เม.ษ.", "พ.ค", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
         return thaiDays[date.getDay()] + " " + date.getDate() + " " + thaiMonths[date.getMonth()] + " " +
@@ -109,6 +109,9 @@ class ChatArea extends React.Component {
                     <div key={"chat" + chatMessage.timestamp} className="chat-item">
                         <img className="profile-image chat-item-profile-image" src={require("../images/dog2.png")} />
                         <div className="chat-item-message">{chatMessage.msg}</div>
+                        <div className="chat-timestamp-holder">
+                            <div className="chat-timestamp">{this.getTime(chatMessage.timestamp)}</div>
+                        </div>
                     </div>
                 );
             }
@@ -179,7 +182,7 @@ class ChatArea extends React.Component {
                 </div>
                 <div className="bottom-input">
                      <img className="profile-image" src={require("../images/dog1.png")} />
-                     <input name="message" onChange={this.handleChange}  className="chat-input" type="text" placeholder="enter your message..." />
+                     <input value={this.state.message} name="message" onChange={this.handleChange}  className="chat-input" type="text" placeholder="enter your message..." />
                      <button onClick={this.handleSendMessage} className="send-button"><FontAwesomeIcon icon={faPaperPlane} style={{marginRight: "5px"}} />Send</button>
                 </div>
             </div>

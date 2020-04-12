@@ -2,7 +2,8 @@ import React from 'react';
 import '../App.css';
 import  { connect} from 'react-redux';
 import { auth } from '../actions';
-import { withRouter } from 'react-router';
+import { withRouter, Redirect } from 'react-router';
+import { Modal, Button } from 'react-bootstrap';
 
 class Register extends React.Component  {
 
@@ -18,7 +19,9 @@ class Register extends React.Component  {
                 username: "",
                 password: "",
                 confirmPassword: ""
-            }
+            },
+            showModal: false,
+            goToLogin: false
         }
 
     }
@@ -82,8 +85,12 @@ class Register extends React.Component  {
         }
   
         try {
-          await this.props.register(this.state.name, this.state.username, this.state.password);
+          let res = await this.props.register(this.state.name, this.state.username, this.state.password);
           console.log("login successful");
+          console.log(res);
+          this.setState({
+            showModal: true
+          });
         }
         catch(err){
           console.error(err);
@@ -94,7 +101,20 @@ class Register extends React.Component  {
         this.props.history.goBack();
       }
 
+      handleClose = () => {
+        console.log("handle close")
+        this.setState({
+          goToLogin: true,
+          showModal: false
+        })
+      }
+
     render(){
+
+      if ( this.state.goToLogin ){
+        return <Redirect to="/login" />
+      }
+
         return (
             <div className="App">
                 <div className="reg-box">
@@ -114,6 +134,17 @@ class Register extends React.Component  {
                     <button className="login-button mr-20" onClick={this.goBack}>Back</button>
                     <button className="login-button mr-20" onClick={this.handleRegister}>Submit</button>
                 </div>
+                <Modal show={this.state.showModal} onHide={this.handleClose}>
+                  <Modal.Header closeButton>
+                    <Modal.Title>Registration Success!</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>You can now login.</Modal.Body>
+                  <Modal.Footer>
+                    <Button variant="primary" onClick={this.handleClose}>
+                      Go To Login
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
             </div>
         );
     }

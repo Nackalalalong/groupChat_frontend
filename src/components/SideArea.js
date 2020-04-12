@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import "./SideArea.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faPlus } from '@fortawesome/free-solid-svg-icons';
 import io from 'socket.io-client';
 import { connect } from 'react-redux';
-
+import { Tab, Tabs } from 'react-bootstrap';
+import ReactTooltip from 'react-tooltip'
 
 const socket = io("http://localhost:8000");
 
@@ -13,22 +14,21 @@ class SideArea extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-
+            showFindGroup: false,
+            findGroupID: "",
+            joinGroupID: "",
+            createGroupName: ""
         }
-
-        this.socket = io("http://localhost:8000", {
-            query: "token=" + this.props.auth.token
-        });
     }
 
     createGroup = () => {
-        if ( this.state.createGroupName === "" ){
+        if ( this.state.createGroupName === "" || this.state.createGroupName == null){
             alert("please insert group name");
             return ;
         }
 
         console.log("emiting createGroup");
-        this.socket.emit("createGroup", this.state.createGroupName);
+        this.props.socket.emit("createGroup", this.state.createGroupName);
         console.log("group created");
     }
 
@@ -39,46 +39,120 @@ class SideArea extends React.Component {
         });
     }
 
+    expandMyGroup = () => {
+        this.setState({
+            showMyGroup: true
+        });
+    }
+
+    toggleFindGroup = () => {
+        let showFindGroup = this.state.showFindGroup;
+        this.setState({
+            showFindGroup: !showFindGroup
+        });
+    }
+
+    handleJoinGroup = () => {
+        console.log("handle joinGroup");
+        let joinGroupID = this.state.joinGroupID;
+        if ( joinGroupID == null || joinGroupID === "" ) {
+            alert("please enter group ID to join");
+            return ;
+        }
+
+        console.log("emitting joinGroup");
+        this.props.socket.emit("joinGroup", {
+            gid: joinGroupID,
+            username: this.props.user.username,
+            sid: this.props.user._id
+        });
+        this.setState({
+            joinGroupID: ""
+        })
+        console.log("done emitting joinGroup");
+    }
+
+    handleLeaveGroup = () => {
+
+    }
+
+    handleChangeChatRoom = (roomCID) => {
+        this.props.changeChatRoom(roomCID);
+    }
+
     render(){
-        return (
-            <div className="side-area-container">
-                <div className="profile">
-                    <img className="profile-image" src={require("../images/dog1.png")} />
-                    <span className="profile-name">ประยุทธ์ จันทร์โอมายก๊อด</span>
+
+        let chatRoomComponents = [];
+        let chatRooms = this.props.user.chatRooms;
+        if ( chatRooms != null ){
+            for( const room of chatRooms){
+                chatRoomComponents.push(
+                    <div onClick={() => this.handleChangeChatRoom(room.cid)} key={"room-chat-"+room.cid} className="side-area-section-content-item hover-pointer" data-tip={"room CID: "+room.cid}>
+                        <span className="side-area-section-content-item-text">{room.chatName}</span>
+                    </div>
+                );
+            }
+        }
+        
+        let groupTab = (
+            <Fragment>
+                <div onClick={this.toggleFindGroup} className="side-area-section-header hover-pointer">
+                    <span className="side-area-section-header-text">find or create group</span>
                 </div>
-                <div className="side-area-section-header">
-                    <span className="side-area-section-header-text">my groups</span>
-                </div>
-                <div className="side-area-section-content" id="mygroup">
-                    <div className="side-area-section-content-item side-area-section-content-item-create">
-                        <FontAwesomeIcon className="create-group-icon" icon={faPlus} />
+                <div className={"side-area-section-content"} >
+                    <div className={"side-area-section-content-item side-area-section-content-item-create" + (!this.state.showFindGroup ? " item-collapse" : "")}>
+                        <FontAwesomeIcon className="create-group-icon" icon={faPlus} style={{display: this.state.showFindGroup? "block":"none"}}/>
                         <input onChange={this.handleChange} name="createGroupName" className="create-group-input" type="text" placeholder="enter group name"></input>
                         <button onClick={this.createGroup} className="side-area-section-content-item-button side-area-section-content-item-button-create">
                             create
                         </button>
                     </div>
-                    <div className="side-area-section-content-item">
-                        <span className="side-area-section-content-item-text">Miniproject</span>
-                        <button className="side-area-section-content-item-button side-area-section-content-item-button-leave">
-                            leave
+                    <div className={"side-area-section-content-item side-area-section-content-item-create"+ (!this.state.showFindGroup ? " item-collapse" : "")}>
+                        <FontAwesomeIcon className="create-group-icon" icon={faSearch} style={{display: this.state.showFindGroup? "block":"none"}}/>
+                        <input onChange={this.handleChange} name="joinGroupID" className="create-group-input" type="text" placeholder="enter group ID"></input>
+                        <button onClick={this.handleJoinGroup} className="side-area-section-content-item-button side-area-section-content-item-button-join">
+                            join
                         </button>
                     </div>
-                </div>
-                <div className="side-area-section-header">
-                    <span className="side-area-section-header-text">find group</span>
-                </div>
-                <div className="side-area-section-content" id="findgroup">
-                    <div className="side-area-section-content-item side-area-section-content-item-create">
-                        <FontAwesomeIcon className="create-group-icon" icon={faSearch} />
-                        <input className="create-group-input" type="text" placeholder="enter group name"></input>
-                    </div>
-                    <div className="side-area-section-content-item">
+                    {/* <div className="side-area-section-content-item">
                         <span className="side-area-section-content-item-text">Group1</span>
                         <button className="side-area-section-content-item-button side-area-section-content-item-button-join">
                             join
                         </button>
-                    </div>
+                    </div> */}
                 </div>
+                <div className="side-area-section-header" style={{marginTop: this.state.showFindGroup ? "-1px" : "2px"}}>
+                    <span className="side-area-section-header-text">my groups</span>
+                </div>
+                <div className="side-area-section-content" id="mygroup">
+                    {/* <div className="side-area-section-content-item">
+                        <span className="side-area-section-content-item-text">Miniproject</span>
+                        <button className="side-area-section-content-item-button side-area-section-content-item-button-leave">
+                            leave
+                        </button>
+                    </div> */}
+                </div>
+            </Fragment>
+        );
+
+        return (
+            <div className="side-area-container">
+                <ReactTooltip delayShow={1000}/>
+                <div className="profile">
+                    <img className="profile-image" src={require("../images/dog1.png")} />
+                    <span className="profile-name">{this.props.user.username}</span>
+                </div>
+                <Tabs defaultActiveKey="chat">
+                    <Tab eventKey="chat" title="chat">
+                        <div id="mychat">
+                            {chatRoomComponents}
+                        </div>
+                    </Tab>
+                    <Tab eventKey="group" title="group">
+                        {groupTab}
+                    </Tab>
+                </Tabs>
+                
             </div>
         );
     }

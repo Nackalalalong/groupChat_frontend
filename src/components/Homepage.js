@@ -87,12 +87,10 @@ class Homepage extends React.Component  {
           <div className="login-box">
           <h1>Login</h1>
             <div className="text-box">
-              <h3>Username</h3>
+              <h3>Username{this.state.formErrors.username !== "" ? <span style={{fontSize: "10px", color: "red", marginLeft: "1rem"}}>{this.state.formErrors.username}</span> : null}</h3>
               <input onChange={this.handleChange} name="username" className="text-input" type="text" placeholder="enter your username" />
-              {this.state.formErrors.username !== "" ? <span style={{fontSize: "10px", color: "red"}}>{this.state.formErrors.username}</span> : null}
-              <h3>Password</h3>
+              <h3>Password{this.state.formErrors.password !== "" ? <span style={{fontSize: "10px", color: "red", marginLeft: "1rem"}}>{this.state.formErrors.password}</span> : null}</h3>
               <input onChange={this.handleChange} name="password" className="text-input" type="password" placeholder="enter your password" />
-              {this.state.formErrors.password !== "" ? <span style={{fontSize: "10px", color: "red"}}>{this.state.formErrors.password}</span> : null}
             </div>
             <button disabled={this.state.loading} className="login-button mr-20" onClick={this.handleLogin}>Login</button>
             <div style={{textAlign: "right", marginRight: "1rem"}}>

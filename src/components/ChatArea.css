@@ -7,6 +7,15 @@
 .top-bar {
     background-color: #8c8c8c;
     color: white;
+    position: relative;
+}
+
+.delete-group-button {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    margin: 10px 0 10px 0;
 }
 
 .middle-screen {

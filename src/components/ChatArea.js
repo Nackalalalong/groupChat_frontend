@@ -2,6 +2,7 @@ import React from 'react';
 import './ChatArea.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import { Modal, Button } from 'react-bootstrap';
 
 class ChatArea extends React.Component {
     constructor(props){
@@ -9,8 +10,8 @@ class ChatArea extends React.Component {
 
         this.state = {
             roomCID: null,
-            room: null,
-            message: ""
+            message: "",
+            showModal: false
         }
 
         this.props.socket.on("thisRoom", room => {
@@ -85,6 +86,27 @@ class ChatArea extends React.Component {
             this.padTwo(date.getHours()) + ":" + this.padTwo(date.getMinutes()) + " น.";
     }
 
+    handleDeleteGroup = () => {
+        console.log("emitting delete group id: " + this.state._id);
+        this.props.socket.emit("deleteGroup", this.state._id);
+        console.log("done emitting deleteGroup");
+        window.location.reload();
+    }
+
+    showDeleteGroupConfirmation = () => {
+        console.log("show delete group modal");
+        this.setState({
+            showModal: true
+        })
+    }
+
+    handleClose = () => {
+        console.log("handle close modal");
+        this.setState({
+            showModal: false
+        })
+    }
+
     render(){
 
         if ( this.state._id == null ){
@@ -127,68 +149,30 @@ class ChatArea extends React.Component {
                     <span className="top-bar-header-text">{this.state.chatName}</span><br />
                     <span className="top-bar-sub-text">{"number of members: " + this.state.members.length 
                         + " group ID: " + this.state._id}</span>
+                    <button onClick={this.showDeleteGroupConfirmation} className="btn btn-secondary delete-group-button">delete</button>
                 </div>
                 <div className="middle-screen">
                     {chatComponents}
-                     {/* <div className="chat-item">
-                         <img className="profile-image chat-item-profile-image" src={require("../images/dog2.png")} />
-                         <div className="chat-item-message">สวัสดี สิริ!</div>
-                         <div className="chat-timestamp-holder">
-                            <div className="chat-timestamp">{"asdasdasdasdasd"}</div>
-                        </div>
-                     </div>
-                     <div className="chat-item">
-                         <img className="profile-image chat-item-profile-image" src={require("../images/dog3.png")} />
-                         <div className="chat-item-message">สวัสดี มีไรให้ช่asdasd asads asd asd asd asd asasd ads asdas ads ads asdas dads วยหรอมานุดsas das dasd asd sadas dasd asd asd asd asd asd asd asd ads ดด!</div>
-                         <div className="chat-timestamp-holder">
-                            <div className="chat-timestamp">{"asdasdasdasdasd"}</div>
-                        </div>
-                     </div>
-                     <div className="chat-item">
-                         <img className="profile-image chat-item-profile-image" src={require("../images/dog2.png")} />
-                         <div className="chat-item-message">ช่วยทำโปรเจคหน่อยจิ</div>
-                     </div>
-                     <div className="chat-item-me">
-                         <div className="chat-item-message">ทำไรกันอยู่หนะพวกนายยยยยย</div>
-                     </div>
-                     <div className="chat-item">
-                         <img className="profile-image chat-item-profile-image" src={require("../images/dog2.png")} />
-                         <div className="chat-item-message">มีโปรเจคเยอะเลยไม่รู้อาจารย์จะสั่งอะไรนักหนาาาา!</div>
-                     </div>
-                     <div className="chat-item">
-                         <img className="profile-image chat-item-profile-image" src={require("../images/dog4.png")} />
-                         <div className="chat-item-message">พวกนายนินทาอาจารย์อยู่ใช่มั๊ยยยยยย</div>
-                     </div>
-                     <div className="chat-item">
-                         <img className="profile-image chat-item-profile-image" src={require("../images/dog4.png")} />
-                         <div className="chat-item-message">พวกนายนินทาอาจารย์อยู่ใช่มั๊ยยยยยย</div>
-                     </div>
-                     <div className="chat-item">
-                         <img className="profile-image chat-item-profile-image" src={require("../images/dog4.png")} />
-                         <div className="chat-item-message">พวกนายนินทาอาจารย์อยู่ใช่มั๊ยยยยยย</div>
-                     </div>
-                     <div className="chat-item">
-                         <img className="profile-image chat-item-profile-image" src={require("../images/dog4.png")} />
-                         <div className="chat-item-message">พวกนายนินทาอาจารย์อยู่ใช่มั๊ยยยยยย</div>
-                     </div>
-                     <div className="chat-item">
-                         <img className="profile-image chat-item-profile-image" src={require("../images/dog4.png")} />
-                         <div className="chat-item-message">พวกนายนินทาอาจารย์อยู่ใช่มั๊ยยยยยย</div>
-                     </div>
-                     <div className="chat-item">
-                         <img className="profile-image chat-item-profile-image" src={require("../images/dog4.png")} />
-                         <div className="chat-item-message">พวกนายนินทาอาจารย์อยู่ใช่มั๊ยยยยยย</div>
-                     </div>
-                     <div className="chat-item">
-                         <img className="profile-image chat-item-profile-image" src={require("../images/dog4.png")} />
-                         <div className="chat-item-message">พวกนายนินทาอาจารย์อยู่ใช่มั๊ยยยยยย</div>
-                     </div> */}
                 </div>
                 <div className="bottom-input">
                      <img className="profile-image" src={require("../images/dog1.png")} />
                      <input value={this.state.message} name="message" onChange={this.handleChange}  className="chat-input" type="text" placeholder="enter your message..." />
                      <button onClick={this.handleSendMessage} className="send-button"><FontAwesomeIcon icon={faPaperPlane} style={{marginRight: "5px"}} />Send</button>
                 </div>
+                <Modal show={this.state.showModal} onHide={this.handleClose}>
+                  <Modal.Header closeButton>
+                    <Modal.Title>Do you want to delete this group?</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>evething related to this group will be disappeared!</Modal.Body>
+                  <Modal.Footer>
+                    <Button variant="secondary" onClick={this.handleClose}>
+                        no
+                    </Button>
+                    <Button variant="danger" onClick={this.handleDeleteGroup}>
+                        yes
+                    </Button>
+                  </Modal.Footer>
+                </Modal>
             </div>
         );
     }

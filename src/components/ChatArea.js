@@ -6,6 +6,37 @@ import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 class ChatArea extends React.Component {
     constructor(props){
         super(props);
+
+        this.state = {
+            roomCID: this.props.roomCID,
+            room: null
+        }
+
+        this.props.socket.on("thisRoom", room => {
+            console.log(room);
+            this.setState({
+                room: room
+            });
+        });
+
+        if ( this.state.roomCID != null ){
+            console.log("first load chat data");
+            this.loadChatData(this.state.roomCID);
+        }
+    }
+
+    updateRoom = (roomCID) => {
+        if ( roomCID !== this.state.roomCID ){
+            this.setState({
+                roomCID
+            });
+            this.loadChatData(roomCID);
+        }
+    }
+
+    loadChatData = (roomCID) => {
+        console.log("loading chat data " + roomCID);
+        this.props.socket.emit("room", roomCID);
     }
 
     render(){

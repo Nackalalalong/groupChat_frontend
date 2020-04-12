@@ -11,27 +11,37 @@ class ChatPage extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-
+            currentRoomCID: null
         }
         console.log(this.props.auth.token);
-
-        const me = this;
+        this.chatAreaRef = React.createRef();
 
         this.socket = io("http://localhost:8000", {
             query: "token=" + this.props.auth.token
         });
-        this.socket.on("chatRooms", data => {
-            console.log("getting chatRooms");
-            me.setState({ chatRooms: data })
-        });
-        this.socket.on("friendList", data => me.setState({ friendList: data }));
+        this.socket.on("friendList", data => this.setState({ friendList: data }));
+        this.socket.on("isAuth", data => this.setState({
+             user: data, 
+             currentRoomCID: data.chatRooms.length > 0 ? data.chatRooms[0].cid : null
+            }));
     }
 
     handleLogout = () => {
         this.props.logout();
     }
 
+    changeChatRoom = (roomCID) => {
+        this.setState({
+            currentRoomCID: roomCID
+        });
+        this.chatAreaRef.current.updateRoom(roomCID);
+    }
+
     render(){
+        if ( this.state.user == null ){
+            return <h1>loading...</h1>
+        }
+
         return (
             <div className="Apps">
                 <div className="navbar">
@@ -39,8 +49,8 @@ class ChatPage extends React.Component {
                     <button className="logout-button" onClick={this.handleLogout}>LOG OUT</button>
                 </div>
                 <div className="content-container">
-                    <SideArea socket={this.socket}/>
-                    <ChatArea socket={this.socket}/>
+                    <SideArea socket={this.socket} user={this.state.user} changeChatRoom={this.changeChatRoom}/>
+                    <ChatArea ref={this.chatAreaRef} socket={this.socket} user={this.state.user} roomCID={this.state.currentRoomCID}/>
                 </div>
             </div>
         );

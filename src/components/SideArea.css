@@ -2,6 +2,8 @@
     text-align: left;
     height: 100%;
     border-right: 2px solid #8c8c8c;
+    display: flex;
+    flex-flow: column;
 }
 
 .side-area-section-header {
@@ -14,11 +16,6 @@
     color: white;
 }
 
-#mygroup {
-    min-height: 200px;
-    background-color: bisque;
-}
-
 .side-area-section-content-item {
     padding-left: 10px;
     background-color: lightgray;
@@ -27,6 +24,8 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    transition: all 0.15s linear !important;
+    margin-bottom: 1px;
 }
 
 .side-area-section-content-item-create {
@@ -77,3 +76,44 @@
     margin-right: 5px;
 }
 
+.hover-pointer:hover {
+    cursor: pointer;
+    background-color: goldenrod;
+}
+
+.item-collapse {
+    height: 0;
+}
+
+.tab-content {
+    flex-grow: 1;
+    display: flex;
+    flex-flow: column;
+}
+
+.tab-content>.active {
+    display: flex !important;
+    flex-flow: column;
+    flex-grow: 1;
+}
+
+#mygroup {
+    /* background-color: bisque; */
+    flex-grow: 1;
+    height: 100px;
+    overflow: scroll;
+}
+
+#mychat {
+    flex-grow: 1;
+    overflow: scroll;
+    height: 500px;
+}
+
+a.nav-item.nav-link {
+    color: #8c8c8c;
+}
+
+a.nav-item.nav-link.active {
+    color: #A1C794;
+}

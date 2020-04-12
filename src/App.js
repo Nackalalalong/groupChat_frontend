@@ -4,7 +4,7 @@ import ChatPage from './components/ChatPage';
 import Homepage from './components/Homepage';
 import Register from './components/Register';
 import { BrowserRouter as Router, Switch, Route, Link ,NavLink, Redirect} from 'react-router-dom';
-// import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { connect } from 'react-redux';
 import { auth } from './actions';
 

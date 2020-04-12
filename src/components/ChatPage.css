@@ -23,8 +23,8 @@
 
 .side-area-container {
   height: 100%;
-  flex-grow: 1;
-  min-width: 350px;
+  flex-grow: 0;
+  min-width: 400px;
   /* background-color: red; */
 }
 

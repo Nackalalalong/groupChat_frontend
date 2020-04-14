@@ -94,10 +94,10 @@ class Homepage extends React.Component  {
             </div>
             <button disabled={this.state.loading} className="login-button mr-20" onClick={this.handleLogin}>Login</button>
             <div style={{textAlign: "right", marginRight: "1rem"}}>
-              <p>does not have an account? <a href="/register">register now</a></p>
+              <p>don't have an account? <a href="/register">register now</a></p>
             </div>
           </div>
-          <button className="submit-button mr-20"><a href='/chatpage' className="FormField__Link">Go to ChatPage</a></button>
+          <button className="submit-button mr-20"><a href='/chatpage' className="FormField__Link">Go to Chat Page</a></button>
         </div>
     );
     }

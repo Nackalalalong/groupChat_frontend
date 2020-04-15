@@ -11,7 +11,8 @@ class ChatArea extends React.Component {
         this.state = {
             roomCID: null,
             message: "",
-            showModal: false
+            showModal: false,
+            leave: false
         }
 
         this.props.socket.on("thisRoom", room => {
@@ -25,6 +26,28 @@ class ChatArea extends React.Component {
         this.props.socket.on("deleteGroupSuccess", (some) => {
             window.location.reload();
         });
+        this.props.socket.on("leaveGroupResult", (status) => {
+            if ( status === "success" ){
+                window.location.reload();
+            }
+            else {
+                alert("something went wrong, please try again later.");
+                this.setState({
+                    showModal: false
+                })
+            }
+        })
+    }
+
+    getProfileImage = (username) => {  // i is 1-5 inclusive
+        console.log(username);
+        for( let i=0; i< this.state.members.length; ++i){
+            let user = this.state.members[i];
+            if ( user.username === username ){
+                return "dog" + ( (i%5) + 1) + ".png";
+            }
+        }
+        console.log("end");
     }
 
     updateRoom = (chat) => {
@@ -93,17 +116,32 @@ class ChatArea extends React.Component {
             this.padTwo(date.getHours()) + ":" + this.padTwo(date.getMinutes()) + " น.";
     }
 
-    handleDeleteGroup = () => {
-        console.log("emitting delete group id: " + this.state._id);
-        this.props.socket.emit("deleteGroup", this.state._id);
-        console.log("done emitting deleteGroup");
-        // window.location.reload();
+    handleLeaveOrDeleteGroup = () => {
+
+        if ( this.state.leave ){
+            this.props.socket.emit("deleteGroup", {
+                gid: this.state._id,
+                username: this.props.user.username
+            });
+        }
+        else{
+            this.props.socket.emit("deleteGroup", this.state._id);
+        }
     }
 
     showDeleteGroupConfirmation = () => {
         console.log("show delete group modal");
         this.setState({
-            showModal: true
+            showModal: true,
+            leave: false
+        })
+    }
+
+    showLeaveGroupConfirmation = () => {
+        console.log("show leave group modal");
+        this.setState({
+            showModal: true,
+            leave: true
         })
     }
 
@@ -140,7 +178,7 @@ class ChatArea extends React.Component {
             else {
                 chatComponents.push(
                     <div key={"chat" + chatMessage.timestamp} className="chat-item">
-                        <img className="profile-image chat-item-profile-image" src={require("../images/dog2.png")} />
+                        <img className="profile-image chat-item-profile-image" src={require("../images/" + this.getProfileImage(chatMessage.username))} />
                         <div className="chat-item-message">{chatMessage.msg}</div>
                         <div className="chat-timestamp-holder">
                             <div className="chat-timestamp">{this.getTime(chatMessage.timestamp)}</div>
@@ -152,7 +190,11 @@ class ChatArea extends React.Component {
 
         let deleteGroupButton = this.state.owner === this.props.user.username ? 
             <button onClick={this.showDeleteGroupConfirmation} className="btn btn-secondary delete-group-button">delete</button>
-            : null;
+            : <button onClick={this.showLeaveGroupConfirmation} className="btn btn-secondary delete-group-button">leave</button>;
+
+        if ( this.state.members == null ){
+            return null
+        }
 
         return (
             <div className="chat-area">
@@ -172,14 +214,14 @@ class ChatArea extends React.Component {
                 </div>
                 <Modal show={this.state.showModal} onHide={this.handleClose}>
                   <Modal.Header closeButton>
-                    <Modal.Title>Do you want to <span className="text-danger">delete</span> this group?</Modal.Title>
+                    <Modal.Title>Do you want to <span className="text-danger">{this.state.leave ? "leave" : "delete"}</span> this group?</Modal.Title>
                   </Modal.Header>
-                  <Modal.Body><span className="text-danger">Evething</span> related to this group will be disappeared!</Modal.Body>
+                  <Modal.Body><span className="text-danger">Evething</span> related to this group will disappear!</Modal.Body>
                   <Modal.Footer>
                     <Button variant="secondary" onClick={this.handleClose}>
                         no
                     </Button>
-                    <Button variant="danger" onClick={this.handleDeleteGroup}>
+                    <Button variant="danger" onClick={this.handleLeaveOrDeleteGroup}>
                         yes
                     </Button>
                   </Modal.Footer>

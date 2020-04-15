@@ -133,12 +133,18 @@ class SideArea extends React.Component {
         console.log("done emitting joinGroup");
     }
 
-    handleLeaveGroup = () => {
-
-    }
-
     handleChangeChatRoom = (roomCID) => {
         this.props.changeChatRoom(roomCID);
+    }
+
+    
+    getProfileImage = (username) => {  // i is 1-5 inclusive
+        for( let i=0; i< this.state.members; ++i){
+            let user = this.state.members[i];
+            if ( user.username === username ){
+                return "../images/dog" + ( (i%5) + 1) + ".png";
+            }
+        }
     }
 
     render(){
@@ -207,10 +213,11 @@ class SideArea extends React.Component {
         );
 
         return (
+
             <div className="side-area-container">
                 <ReactTooltip delayShow={1000}/>
                 <div className="profile">
-                    <img className="profile-image" src={require("../images/dog1.png")} />
+                <img className="profile-image" src={require("../images/dog1.png")} />;
                     <span className="profile-name">{this.props.user.name}</span>
                 </div>
                 <Tabs defaultActiveKey="chat">

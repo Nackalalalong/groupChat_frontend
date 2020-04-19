@@ -119,3 +119,10 @@ a.nav-item.nav-link {
 a.nav-item.nav-link.active {
     color: #A1C794;
 }
+
+.unread-noti {
+    background-color: lightgreen;
+    margin-right: 10px;
+    padding: 0 5px 0 5px;
+    border-radius: 10px;
+}

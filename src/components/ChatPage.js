@@ -11,7 +11,8 @@ class ChatPage extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            currentRoomCID: null
+            currentRoomCID: null,
+            unreadCount: null
         }
         console.log(this.props.auth.token);
         this.chatAreaRef = React.createRef();
@@ -37,6 +38,16 @@ class ChatPage extends React.Component {
         this.chatAreaRef.current.updateRoomInfo(roomCID);
     }
 
+    test = async (e) => {
+        this.socket.emit("reqUnreadMsg");
+    }
+
+    setUnreadCount = (count) => {
+        this.setState({
+            unreadCount: count
+        })
+    }
+
     render(){
         if ( this.state.user == null ){
             return <h1>loading...</h1>
@@ -46,11 +57,12 @@ class ChatPage extends React.Component {
             <div className="Apps">
                 <div className="navbar">
                     <span className="groupchat-name">#ผนงรจตกม</span>
+                    {/* <button onClick={this.test}>test</button> */}
                     <button className="logout-button" onClick={this.handleLogout}>LOG OUT</button>
                 </div>
                 <div className="content-container">
-                    <SideArea socket={this.socket} user={this.state.user} changeChatRoom={this.changeChatRoom}/>
-                    <ChatArea ref={this.chatAreaRef} socket={this.socket} user={this.state.user} roomCID={this.state.currentRoomCID}/>
+                    <SideArea setUnreadCount={this.setUnreadCount} socket={this.socket} user={this.state.user} changeChatRoom={this.changeChatRoom}/>
+                    <ChatArea unreadCount={this.state.unreadCount} ref={this.chatAreaRef} socket={this.socket} user={this.state.user} roomCID={this.state.currentRoomCID}/>
                 </div>
             </div>
         );

@@ -47,6 +47,8 @@ class ChatArea extends React.Component {
                 return "dog" + ( (i%5) + 1) + ".png";
             }
         }
+
+        return "dog2.png";
         console.log("end");
     }
 
@@ -55,6 +57,7 @@ class ChatArea extends React.Component {
         console.log(chat);
         let messages = this.state.messages;
         messages.push(chat);
+        this.props.socket.emit("reqUnreadMsg");
         this.setState({
             messages
         })
@@ -119,7 +122,7 @@ class ChatArea extends React.Component {
     handleLeaveOrDeleteGroup = () => {
 
         if ( this.state.leave ){
-            this.props.socket.emit("deleteGroup", {
+            this.props.socket.emit("leaveGroup", {
                 gid: this.state._id,
                 username: this.props.user.username
             });
@@ -184,6 +187,11 @@ class ChatArea extends React.Component {
                             <div className="chat-timestamp">{this.getTime(chatMessage.timestamp)}</div>
                         </div>
                     </div>
+                );
+            }
+            if ( this.props.unreadCount != null && this.props.unreadCount > 0 && this.props.unreadCount === this.state.messages.length - i){
+                chatComponents.push(
+                    <div className="unread text-secondary">unread</div>
                 );
             }
         }

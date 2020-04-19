@@ -27,6 +27,29 @@ class SideArea extends React.Component {
 
         this.props.socket.on("joinGroupResult", this.joinGroupResult);
         this.props.socket.on("createGroupResult", this.createGroupResult);
+        this.props.socket.on("unreadMsg", this.manageUnreadMsg);
+        this.props.socket.on("updateAnotherGroup", () => {
+            this.props.socket.emit("reqUnreadMsg");
+        });
+    }
+
+    manageUnreadMsg = unreadMsg => {
+        console.log("on unreads msg");
+        if ( this.state.roomCID != null ){
+            unreadMsg[this.state.roomCID] = [];
+        }
+
+        this.setState({
+            unreadMsg
+        });
+    }
+
+    componentDidMount(){
+        console.log("delaying erqUnreadMsg");
+        setTimeout(function() { //Start the timer
+            console.log("emitting erqUnreadMsg");
+            this.props.socket.emit("reqUnreadMsg");
+        }.bind(this), 500)
     }
 
     createGroupResult = (status) => {
@@ -134,6 +157,18 @@ class SideArea extends React.Component {
     }
 
     handleChangeChatRoom = (roomCID) => {
+        console.log("handle change room");
+        let unreadMsg = this.state.unreadMsg;
+        if ( this.state.roomCID == null ){  // เข้าห้องครั้งแรกของการโหลด
+            this.props.setUnreadCount(unreadMsg[roomCID].length);
+        }
+        if ( unreadMsg != null ){
+            unreadMsg[roomCID] = [];
+        }
+        this.setState({
+            unreadMsg,
+            roomCID
+        });
         this.props.changeChatRoom(roomCID);
     }
 
@@ -154,16 +189,20 @@ class SideArea extends React.Component {
         let groupComponents = [];
         if ( chatRooms != null ){
             for( const room of chatRooms){
+                let unreadMsgCount = this.state.unreadMsg != null ? this.state.unreadMsg[room.cid].length : 0;
+                unreadMsgCount = unreadMsgCount === 0 ? "" : unreadMsgCount;
                 chatRoomComponents.push(
                     <div onClick={() => this.handleChangeChatRoom(room.cid)} key={"room-chat-"+room.cid} className="side-area-section-content-item hover-pointer" data-tip={"room CID: "+room.cid}>
                         <span className="side-area-section-content-item-text">{room.chatName}</span>
+                        <div className="unread-noti">{unreadMsgCount}</div>
                     </div>
                 );
 
                 if ( room.owner === this.props.user.username ){
                     groupComponents.push(
-                        <div onClick={() => this.handleChangeChatRoom(room.cid)} key={"room-chat-"+room.cid} className="side-area-section-content-item hover-pointer" data-tip={"room CID: "+room.cid}>
+                    <div onClick={() => this.handleChangeChatRoom(room.cid)} key={"room-chat-"+room.cid} className="side-area-section-content-item hover-pointer" data-tip={"room CID: "+room.cid}>
                         <span className="side-area-section-content-item-text">{room.chatName}</span>
+                        <div className="unread-noti">{unreadMsgCount}</div>
                     </div>
                     )
                 }

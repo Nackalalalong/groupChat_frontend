@@ -12,7 +12,8 @@ class ChatArea extends React.Component {
             roomCID: null,
             message: "",
             showModal: false,
-            leave: false
+            leave: false,
+            receiveChats: 0
         }
 
         this.props.socket.on("thisRoom", room => {
@@ -59,7 +60,8 @@ class ChatArea extends React.Component {
         messages.push(chat);
         this.props.socket.emit("reqUnreadMsg");
         this.setState({
-            messages
+            messages,
+            receiveChats: this.state.receiveChats + 1
         })
     }
 
@@ -182,14 +184,17 @@ class ChatArea extends React.Component {
                 chatComponents.push(
                     <div key={"chat" + chatMessage.timestamp} className="chat-item">
                         <img className="profile-image chat-item-profile-image" src={require("../images/" + this.getProfileImage(chatMessage.username))} />
-                        <div className="chat-item-message">{chatMessage.msg}</div>
+                        <div>
+                            <div className="text-left">{chatMessage.username}</div>
+                            <div className="chat-item-message">{chatMessage.msg}</div>
+                        </div>
                         <div className="chat-timestamp-holder">
                             <div className="chat-timestamp">{this.getTime(chatMessage.timestamp)}</div>
                         </div>
                     </div>
                 );
             }
-            if ( this.props.unreadCount != null && this.props.unreadCount > 0 && this.props.unreadCount === this.state.messages.length - i){
+            if ( this.props.unreadCount != null && this.props.unreadCount > 0 && this.props.unreadCount === this.state.messages.length - this.state.receiveChats - i){
                 chatComponents.push(
                     <div className="unread text-secondary">unread</div>
                 );
@@ -224,7 +229,7 @@ class ChatArea extends React.Component {
                   <Modal.Header closeButton>
                     <Modal.Title>Do you want to <span className="text-danger">{this.state.leave ? "leave" : "delete"}</span> this group?</Modal.Title>
                   </Modal.Header>
-                  <Modal.Body><span className="text-danger">Evething</span> related to this group will disappear!</Modal.Body>
+                  <Modal.Body><span className="text-danger">Everything</span> related to this group will disappear!</Modal.Body>
                   <Modal.Footer>
                     <Button variant="secondary" onClick={this.handleClose}>
                         no

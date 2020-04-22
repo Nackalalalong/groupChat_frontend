@@ -17,7 +17,7 @@ class ChatPage extends React.Component {
         console.log(this.props.auth.token);
         this.chatAreaRef = React.createRef();
 
-        this.socket = io(process.env.REACT_APP_API_URL, {
+        this.socket = io(process.env.REACT_APP_API_URL+"/", {
             query: "token=" + this.props.auth.token,
             transports: ['websocket']
         });

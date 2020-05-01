@@ -13,7 +13,7 @@ export const loadUser = () => {
       if (token) {
         headers["Authorization"] = `Token ${token}`;
 
-        return fetch(process.env.REACT_APP_API_URL + "/api/home", {headers, method: "POST"})  
+        return fetch("http://54.169.129.156/api/home", {headers, method: "POST"})  
         .then(res => {
           if (res.status < 500) {
             return res.json().then(data => {
@@ -44,7 +44,7 @@ export const loadUser = () => {
       let headers = {"Content-Type": "application/json"};
       let body = JSON.stringify({username, password});
   
-      return fetch(process.env.REACT_APP_API_URL + "/api/login", {headers, body, method: "POST"})
+      return fetch("http://54.169.129.156/api/login", {headers, body, method: "POST"})
         .then(res => {
           if (res.status < 500) {
             return res.json().then(data => {
@@ -80,7 +80,7 @@ export const loadUser = () => {
       let body = JSON.stringify({name, username, password});
       console.log(body);
   
-      return fetch(process.env.REACT_APP_API_URL + "/api/register", {headers, body, method: "POST"})
+      return fetch("http://54.169.129.156/api/register", {headers, body, method: "POST"})
         .then(res => {
           if (res.status < 500) {
             return res.json().then(data => {
